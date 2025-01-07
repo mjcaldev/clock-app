@@ -18,7 +18,7 @@ function setDate() {
 function startClock() {
   if (clockStarted) return; // disable multiple clockStarted being run
   clockStarted = true;
-  setInterval(setDate, 1000);
+  clockInterval = setInterval(setDate, 1000);
   document.querySelector('#msg').textContent = "Clock Started!";
 }
 
