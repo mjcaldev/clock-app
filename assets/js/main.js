@@ -1,42 +1,31 @@
 const secondHand = document.querySelector('.second-hand');
+  const minsHand = document.querySelector('.min-hand');
+  const hourHand = document.querySelector('.hour-hand');
 
-let clockStarted = false;
-let clockInterval = null;
+  function setDate() {
+    const now = new Date();
 
-function setDate() {
-  if(!secondHand) {
-    console.error('No element with class "second-hand" found.');
-    return;
+    const seconds = now.getSeconds();
+    const secondsDegrees = ((seconds / 60) * 360) + 90;
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+    const mins = now.getMinutes();
+    const minsDegrees = ((mins / 60) * 360) + ((seconds/60)*6) + 90;
+    minsHand.style.transform = `rotate(${minsDegrees}deg)`;
+
+    const hour = now.getHours();
+    const hourDegrees = ((hour / 12) * 360) + ((mins/60)*30) + 90;
+    hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+    if(seconds === 0) {
+      secondHand.style.transition = `none`;
+    } else {
+      secondHand.style.transition = `all 0.5s cubic-bezier(0.1, 2.7, 0.58, 1)`;
+    }
+
+    console.log({ seconds, mins, hour }) // placing in object so key/value shows instead of just value
   }
-  const now = new Date();
-  const seconds = now.getSeconds();
-  const secondsDegrees = ((seconds / 60) * 360) + 90; // the add 90 offsets the 90 deg default for clock arm
-  secondHand.style.transform = `rotate(${secondsDegrees}deg)`
-  console.log(seconds)
-}
 
-function startClock() {
-  if (clockStarted) return; // disable multiple clockStarted being run
-  clockStarted = true;
-  clockInterval = setInterval(setDate, 1000);
-  document.querySelector('#msg').textContent = "Clock Started!";
-}
+  setInterval(setDate, 1000);
 
-function stopClock() {
-  if (!clockStarted) return;
-  clearInterval(clockInterval);
-  clockStarted = false;
-  document.querySelector('#msg').textContent = "Clock Stopped!";
-}
-
-// scalable key-action mapping
-const keyActions = {
-  Enter: startClock,
-  Escape: stopClock,
-};
-
-
-document.addEventListener('keydown', (event) => {
-  const action = keyActions[event.key]; // Dynamic checking our object above
-  if (action) action(); // modular call of the resulting key action
-});
+  setDate();
