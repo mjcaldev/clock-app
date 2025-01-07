@@ -1,6 +1,7 @@
 const secondHand = document.querySelector('.second-hand');
 
 let clockStarted = false;
+let clockInterval = null;
 
 function setDate() {
   if(!secondHand) {
@@ -23,8 +24,9 @@ function startClock() {
 
 function stopClock() {
   if (!clockStarted) return;
+  clearInterval(clockInterval);
   clockStarted = false;
-  document.querySelector('#msg').textContent = "Clock Started!";
+  document.querySelector('#msg').textContent = "Clock Stopped!";
 }
 
 // scalable key-action mapping
@@ -36,5 +38,5 @@ const keyActions = {
 
 document.addEventListener('keydown', (event) => {
   const action = keyActions[event.key]; // Dynamic checking our object above
-  if(action) action(); // modular call of the resulting key action
+  if (action) action(); // modular call of the resulting key action
 });
